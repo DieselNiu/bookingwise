@@ -23,10 +23,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
             this.logger.warn('Document not found with filterQuery', filterQuery);
             throw new NotFoundException('Document not found.');
         }
-        return document;
+        return document as TDocument;
     }
 
-    async findONeAndUpdate(filterQuery: FilterQuery<TDocument>, update: UpdateQuery<TDocument>) {
+    async findOneAndUpdate(filterQuery: FilterQuery<TDocument>, update: UpdateQuery<TDocument>) {
         const document = await this.model.findOneAndUpdate(filterQuery, update, {
             lean: true,
             new: true,
