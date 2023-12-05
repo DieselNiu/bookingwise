@@ -9,6 +9,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     constructor(protected readonly model: Model<TDocument>) {}
 
     async create(document: Omit<TDocument, '_id'>): Promise<TDocument> {
+        console.log(document);
         // eslint-disable-next-line new-cap
         const createdDocument = new this.model({
             ...document,
@@ -39,11 +40,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         return document;
     }
 
-    async find(filterQuery: FilterQuery<TDocument>) {
-        return this.model.find(filterQuery, {}, { lean: true });
+    async find(filterQuery: FilterQuery<TDocument>): Promise<TDocument[]> {
+        return this.model.find(filterQuery).lean<TDocument[]>(true);
     }
 
-    async findOneAndDelete(filterQuery: FilterQuery<TDocument>) {
-        return this.model.findOneAndDelete(filterQuery);
+    async findOneAndDelete(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
+        return this.model.findOneAndDelete(filterQuery).lean<TDocument>(true);
     }
 }
